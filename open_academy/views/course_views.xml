@@ -3,19 +3,20 @@
         <field name="name">Courses</field>
         <field name="res_model">open_academy.course</field>
         <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_responsible_filter': 1}</field>
     </record>
 
     <menuitem id="menu_root" name="Open Academy"/>
     <menuitem id="course" parent="menu_root" name="Courses" sequence="10" action="action_list_course"/>
-    
+
     <record id="view_course_tree" model="ir.ui.view">
         <field name="name">view.course.tree</field>
         <field name="model">open_academy.course</field>
         <field name="arch" type="xml">
-            <tree name="course">
-                <field name="title"/>
+            <tree name="Course Tree">
+                <field name="name"/>
                 <field name="description"/>
-                <field name="responsible"/>
+                <field name="responsible_id"/>
             </tree>
         </field>
     </record>
@@ -24,18 +25,18 @@
         <field name="name">view.course.form</field>
         <field name="model">open_academy.course</field>
         <field name="arch" type="xml">
-            <form string="Course Form">
+            <form name="Course Form">
                 <sheet>
                     <group>                
-                        <field name="title"/>
-                        <field name="responsible"/>
+                        <field name="name"/>
+                        <field name="responsible_id"/>
                     </group>
                     <notebook>
-                        <page string="Description" name="description">
+                        <page string="Description">
                             <field name="description"/>
                         </page>
                         <page string="Sessions">
-                            <field name="sessions"/>
+                            <field name="session_ids"/>
                         </page>
                     </notebook>
                 </sheet>
@@ -48,11 +49,14 @@
         <field name="model">open_academy.course</field>
         <field name="arch" type="xml">
             <search>
-                <field name="title"/>
+                <field name="name"/>
                 <field name="description"/>
-                <field name="responsible"/>
+                <field name="responsible_id"/>
+                <filter name="responsible_filter" string="Responsible" domain="[('responsible_id', '=', uid)]"/>
+                <group string="Group by">
+                    <filter name="group_by_responsible" string="Responsible" context="{'group_by': 'responsible_id'}"/>
+                </group>
             </search>
         </field>
     </record>
-
 </odoo>
